@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import br.com.felipegabriel.minhalivraria.models.Livro;
+import br.com.felipegabriel.minhalivraria.projections.LivrosForLoja;
 
 public interface LivroService {
 
@@ -11,13 +12,15 @@ public interface LivroService {
 	
 	Optional<Livro> getByPkLivro(Integer pkLivro);
 	
-	void delete(Integer pkLivro);
+	void delete(Livro livro);
 	
 	Livro update(Livro livro);
 	
 	List<Livro> getAll();
 	
 	List<Livro> getByCategoria(Integer fkCategoria);
+	
+	List<LivrosForLoja> getLivrosForLoja();
 	
 	
 }

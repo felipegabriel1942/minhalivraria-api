@@ -14,7 +14,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import br.com.felipegabriel.minhalivraria.models.Autor;
+import br.com.felipegabriel.minhalivraria.models.Categoria;
+import br.com.felipegabriel.minhalivraria.models.Estoque;
 import br.com.felipegabriel.minhalivraria.models.Livro;
+import br.com.felipegabriel.minhalivraria.projections.LivrosForLoja;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -97,6 +101,28 @@ public class LivroRepositoryTest {
 		assertThat(result.get(0).getFkCategoria()).isEqualTo(1);
 	}
 	
+	@Test
+	@DisplayName("Deve trazer as informações necessarias para criar a tela de seleção de livros da loja.")
+	public void getLivrosForLojaTest() {
+		
+		Livro livro = criarNovoLivro1();
+		
+		Autor autor = criarAutor1();
+		
+		Categoria categoria = criarCategoria1();
+		
+		Estoque estoque = criarEstoque1();
+		
+		entityManager.persist(livro);
+		entityManager.persist(autor);
+		entityManager.persist(categoria);
+		entityManager.persist(estoque);
+		
+		List<LivrosForLoja> livros = repository.getLivrosForLoja();
+		
+		assertThat(livros).hasSize(1);
+	}
+	
 	public static Livro criarNovoLivro1() {
 		return Livro.builder()
 				.titulo("Conan - o barbaro")
@@ -106,6 +132,18 @@ public class LivroRepositoryTest {
 				.dataCadastro(LocalDate.now())
 				.imagem("imagem")
 				.resumo("Um livro sobre um barbaro.").build();	
+	}
+	
+	public static Autor criarAutor1() {
+		return Autor.builder().nome("Felipe").build();
+	}
+	
+	public static Categoria criarCategoria1() {
+		return Categoria.builder().descricao("Aventura").build();
+	}
+	
+	public static Estoque criarEstoque1() {
+		return Estoque.builder().fkLivro(4).quantidade(2).build();
 	}
 	
 	public static Livro criarNovoLivro2() {
